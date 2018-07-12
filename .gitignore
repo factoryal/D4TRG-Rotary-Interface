@@ -367,3 +367,4 @@ D4TRG-sidecontroller.vcxproj.filters
 __vm/Upload.vmps.xml
 __vm/Configuration.Debug.vmps.xml
 __vm/Compile.vmps.xml
+*.sln

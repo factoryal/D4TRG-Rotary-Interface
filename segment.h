@@ -111,7 +111,6 @@ public:
 	}
 
 	void update() {
-		//if (millis() - oldTime > updatePeriod) {
 		digitalWrite(PIN_LATCH, 0);
 		for (int i = 0; i < 3; i++) {
 			digitalWrite(pinidx[i], 0);
@@ -123,7 +122,6 @@ public:
 		if (++currentSegmentIdx >= 3) currentSegmentIdx = 0;
 
 		oldTime = millis();
-		//}
 	}
 
 	void setLevel(const byte level) {

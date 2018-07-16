@@ -34,32 +34,32 @@ private:
 		0x07, /* 7 */
 		0x7F, /* 8 */
 		0x6F, /* 9 */
-		0x5F, /* a */
-		0x7C, /* b */
-		0x58, /* c */
-		0x5E, /* d */
-		0x7B, /* e */
-		0x71, /* f */
-		0x6F, /* g */
-		0x74, /* h */
-		0x10, /* i */
-		0x0C, /* j */
-		0x75, /* k */
-		0x30, /* l */
-		0x14, /* m */
-		0x54, /* n */
-		0x5C, /* o */
-		0x73, /* p */
-		0x67, /* q */
-		0x50, /* r */
-		0x6D, /* s */
-		0x78, /* t */
-		0x1C, /* u */
-		0x1C, /* v */
-		0x14, /* w */
-		0x76, /* x */
-		0x6E, /* y */
-		0x5B /* z */
+		0x77, /* A */
+		0x7C, /* B */
+		0x39, /* C */
+		0x5E, /* D */
+		0x79, /* E */
+		0x71, /* F */
+		0x3D, /* G */
+		0x76, /* H */
+		0x30, /* I */
+		0x1E, /* J */
+		0x75, /* K */
+		0x38, /* L */
+		0x15, /* M */
+		0x37, /* N */
+		0x3F, /* O */
+		0x73, /* P */
+		0x6B, /* Q */
+		0x33, /* R */
+		0x6D, /* S */
+		0x78, /* T */
+		0x3E, /* U */
+		0x3E, /* V */
+		0x2A, /* W */
+		0x76, /* X */
+		0x6E, /* Y */
+		0x5B, /* Z */
 	};
 
 public:
@@ -69,7 +69,7 @@ public:
 
 		// mapping
 		if (ascii >= '0' && ascii <= '9') ascii -= ('0' - 1);
-		else if (ascii >= 'A' && ascii <= 'Z') ascii -= ('A' + 10 - 1);
+		else if (ascii >= 'A' && ascii <= 'Z') ascii -= ('A' - 11);
 		else ascii = 0;
 
 		value = SevenSegmentASCII[ascii];

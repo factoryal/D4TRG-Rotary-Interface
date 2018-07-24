@@ -18,7 +18,7 @@ public:
 	}
 
 	void update() {
-		rotval = e.read() / 2;
+		rotval = e.read() / 4;
 	}
 
 	long read() {

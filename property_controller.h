@@ -4,7 +4,7 @@
 
 class Property {
 protected:
-	char symbol;
+	char symbol[3];
 	int8_t val = 0;
 	int8_t min_val;
 	int8_t max_val;
@@ -14,10 +14,6 @@ protected:
 	bool zero_digit;
 
 public:
-
-	// this will update the peripheral on demand.
-	virtual bool update(int8_t amount) = 0;
-
 	int8_t getVal() {
 		return val;
 	}
@@ -26,15 +22,17 @@ public:
 		return map(val, min_val, max_val, min_level, max_level);
 	}
 
-	char getSymbol() {
-		return symbol;
+	void getSymbol(char* recieveBuffer) {
+		strcpy(recieveBuffer, symbol);
 	}
+	
+	virtual bool update(int8_t amount) = 0;
 };
 
 class SpeakerVolume : public Property {
 public:
-	SpeakerVolume(char symbol, int8_t min_val, int8_t max_val, int8_t min_level, int8_t max_level, uint8_t step, bool zerodigit) {
-		this->symbol = symbol;
+	SpeakerVolume(char* symbol, int8_t min_val, int8_t max_val, int8_t min_level, int8_t max_level, uint8_t step, bool zerodigit) {
+		strcpy(this->symbol, symbol);
 		this->min_val = min_val;
 		this->max_val = max_val;
 		this->min_level = min_level;
@@ -57,8 +55,8 @@ public:
 
 class HeadsetVolume : public Property {
 public:
-	HeadsetVolume(char symbol, int8_t min_val, int8_t max_val, int8_t min_level, int8_t max_level, uint8_t step, bool zerodigit) {
-		this->symbol = symbol;
+	HeadsetVolume(char* symbol, int8_t min_val, int8_t max_val, int8_t min_level, int8_t max_level, uint8_t step, bool zerodigit) {
+		strcpy(this->symbol, symbol);
 		this->min_val = min_val;
 		this->max_val = max_val;
 		this->min_level = min_level;
@@ -81,8 +79,8 @@ public:
 
 class LEDBrightness : public Property {
 public:
-	LEDBrightness(char symbol, int8_t min_val, int8_t max_val, int8_t min_level, int8_t max_level, uint8_t step, bool zerodigit) {
-		this->symbol = symbol;
+	LEDBrightness(char* symbol, int8_t min_val, int8_t max_val, int8_t min_level, int8_t max_level, uint8_t step, bool zerodigit) {
+		strcpy(this->symbol, symbol);
 		this->min_val = min_val;
 		this->max_val = max_val;
 		this->min_level = min_level;
@@ -115,13 +113,13 @@ public:
 		segmentHandler = segment_handler;
 		rotaryHandler = rotary_handler;
 
-		p[0] = new SpeakerVolume('S', 0, 99, 1, 8, 3, true);
-		p[1] = new HeadsetVolume('H', 0, 99, 1, 8, 3, true);
-		p[2] = new LEDBrightness('L', 0, 8, 0, 8, 1, false);
+		p[0] = new SpeakerVolume("SP", 0, 99, 1, 8, 3, true);
+		p[1] = new HeadsetVolume("HS", 0, 99, 1, 8, 3, true);
+		p[2] = new LEDBrightness("LB", 0, 8, 0, 8, 1, false);
 	}
 
 	void update() {
-		char buf[3] = { 0 };
+		char buf[3];
 		int8_t val;
 		int8_t amount;
 
@@ -130,6 +128,7 @@ public:
 		static bool isZeroSpace = 0;
 
 		if (!digitalRead(PIN_SW)) {
+			changeTime = millis() - 2000;
 			if (!isBtnPressed) {
 				isBtnPressed = 1;
 				if (++currentProperty >= 3) currentProperty = 0;
@@ -153,8 +152,8 @@ public:
 				rotaryHandler->zero();
 				//Serial.println(buf);
 
-				segmentHandler->setStr(buf);
-				segmentHandler->setLevel(p[currentProperty]->getLevel());
+				//segmentHandler->setStr(buf);
+				//segmentHandler->setLevel(p[currentProperty]->getLevel());
 				//
 			}
 		}
@@ -184,8 +183,8 @@ public:
 
 
 		}
-		else if (millis() - changeTime > 500) {
-			buf[1] = p[currentProperty]->getSymbol();
+		else if (millis() - changeTime > 2000) {
+			p[currentProperty]->getSymbol(buf);
 			segmentHandler->setStr(buf);
 			segmentHandler->setLevel(p[currentProperty]->getLevel());
 		}

@@ -2,6 +2,10 @@
 
 #include "Arduino.h"
 
+#include "volume_controller.h"
+
+VolumeController vc(PIN_CH1_DATA, PIN_CH1_CLK, PIN_CH2_DATA, PIN_CH2_CLK);
+
 class Property {
 protected:
 	char symbol[3];
@@ -47,7 +51,7 @@ public:
 			if (val < min_val) val = min_val;
 			else if (val > max_val) val = max_val;
 
-
+			vc.setVolume(SPEAKER, val / 3);
 		}
 		return zero_digit;
 	}
@@ -71,15 +75,17 @@ public:
 			if (val < min_val) val = min_val;
 			else if (val > max_val) val = max_val;
 
-
+			vc.setVolume(HEADSET, val / 3);
 		}
 		return zero_digit;
 	}
 };
 
 class LEDBrightness : public Property {
+private:
+	SoftwareSerial* serial_handler;
 public:
-	LEDBrightness(char* symbol, int8_t min_val, int8_t max_val, int8_t min_level, int8_t max_level, uint8_t step, bool zerodigit) {
+	LEDBrightness(char* symbol, int8_t min_val, int8_t max_val, int8_t min_level, int8_t max_level, uint8_t step, bool zerodigit, SoftwareSerial* port) {
 		strcpy(this->symbol, symbol);
 		this->min_val = min_val;
 		this->max_val = max_val;
@@ -87,6 +93,7 @@ public:
 		this->max_level = max_level;
 		step_unit = step;
 		zero_digit = zerodigit;
+		serial_handler = port;
 	}
 
 	bool update(int8_t amount) {
@@ -95,7 +102,7 @@ public:
 			if (val < min_val) val = min_val;
 			else if (val > max_val) val = max_val;
 
-
+			serial_handler->write(val);
 		}
 		return zero_digit;
 	}
@@ -109,13 +116,13 @@ private:
 	uint8_t currentProperty = 0;
 
 public:
-	Properties(SegmentUpdater* segment_handler, Rotary* rotary_handler) {
+	Properties(SegmentUpdater* segment_handler, Rotary* rotary_handler, SoftwareSerial* serial_handler) {
 		segmentHandler = segment_handler;
 		rotaryHandler = rotary_handler;
 
 		p[0] = new SpeakerVolume("SP", 0, 99, 1, 8, 3, true);
 		p[1] = new HeadsetVolume("HS", 0, 99, 1, 8, 3, true);
-		p[2] = new LEDBrightness("LB", 0, 8, 0, 8, 1, false);
+		p[2] = new LEDBrightness("LB", 0, 8, 0, 8, 1, false, serial_handler);
 	}
 
 	void update() {
@@ -150,11 +157,6 @@ public:
 					else itoa(val, buf, 10);
 				}
 				rotaryHandler->zero();
-				//Serial.println(buf);
-
-				//segmentHandler->setStr(buf);
-				//segmentHandler->setLevel(p[currentProperty]->getLevel());
-				//
 			}
 		}
 		else isBtnPressed = 0;

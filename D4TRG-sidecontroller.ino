@@ -1,13 +1,16 @@
+
 #include "pin_definitions.h"
+
+#include <SoftwareSerial.h>
+SoftwareSerial Serial1(PIN_RX1, PIN_TX1);
+
 #include "segment.h"
-
-
 SegmentUpdater fnd;
 
-
 #include "rotary.h"
+#include "volume_controller.h"
 #include "property_controller.h"
-Properties property(&fnd, &enc);
+Properties property(&fnd, &enc, &Serial1);
 
 void setup() {
 	cli();
@@ -20,11 +23,6 @@ void setup() {
 
 void loop() {
 }
-
-void btn() {
-	
-}
-
 
 ISR(TIMER1_OVF_vect) {
 	static byte a = 0;

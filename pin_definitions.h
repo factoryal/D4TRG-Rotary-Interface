@@ -19,3 +19,5 @@
 
 #define PIN_RX1		13 // not used
 #define PIN_TX1		A2
+
+#define PIN_JACKSENSE 12

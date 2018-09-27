@@ -43,6 +43,8 @@ public:
 		this->max_level = max_level;
 		step_unit = step;
 		zero_digit = zerodigit;
+
+		val = 12;
 	}
 
 	bool update(int8_t amount) {
@@ -67,6 +69,8 @@ public:
 		this->max_level = max_level;
 		step_unit = step;
 		zero_digit = zerodigit;
+
+		val = 12;
 	}
 
 	bool update(int8_t amount) {
@@ -94,6 +98,8 @@ public:
 		step_unit = step;
 		zero_digit = zerodigit;
 		serial_handler = port;
+
+		val = 4;
 	}
 
 	bool update(int8_t amount) {
@@ -123,6 +129,7 @@ public:
 		p[0] = new SpeakerVolume("SP", 0, 99, 1, 8, 3, true);
 		p[1] = new HeadsetVolume("HS", 0, 99, 1, 8, 3, true);
 		p[2] = new LEDBrightness("LB", 0, 8, 0, 8, 1, false, serial_handler);
+
 	}
 
 	void update() {
@@ -133,6 +140,13 @@ public:
 		static bool isBtnPressed = 0;
 		static unsigned long changeTime = 0;
 		static bool isZeroSpace = 0;
+
+		static bool jackSense = 0;
+
+		if (jackSense != digitalRead(PIN_JACKSENSE)) {
+			jackSense = digitalRead(PIN_JACKSENSE);
+			currentProperty = jackSense;
+		}
 
 		if (!digitalRead(PIN_SW)) {
 			changeTime = millis() - 2000;

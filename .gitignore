@@ -361,6 +361,7 @@ ASALocalRun/
 
 
 # End of https://www.gitignore.io/api/atmelstudio,visualstudio
+<<<<<<< HEAD
 D4TRG-sidecontroller.vcxproj.filters
 D4TRG-sidecontroller.vcxproj
 __vm/Upload.vmps.xml
@@ -368,3 +369,12 @@ __vm/Configuration.Debug.vmps.xml
 __vm/Compile.vmps.xml
 __vm/.D4TRG-sidecontroller.vsarduino.h
 D4TRG-sidecontroller.sln
+=======
+__vm/.D4TRG-sidecontroller.vsarduino.h
+D4TRG-sidecontroller.vcxproj
+D4TRG-sidecontroller.vcxproj.filters
+__vm/Upload.vmps.xml
+__vm/Configuration.Debug.vmps.xml
+__vm/Compile.vmps.xml
+*.sln
+>>>>>>> alpha
